@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{% block title %}Insertar - KPIs {% endblock %}
+{% block content %}
+<br>
+
+<div id="form">
+<p>Formulario para agregar un nuevo indicador KPIs.</p>
+<hr>
+{% if info_enviado %}
+	Se ha agregado en nuevo indicador correctamente!.
+	<br>
+	El indicador a insertar es el siguiente:<br>
+	<p>Nombre del indicador: {{nombre}}</p>
+	<p> Descripción del concepto: {{dConcepto}}</p>
+	<p> Descripción de la operación: {{dOperacion}}</p>
+	<p> Otro: {{otro}}</p>
+{% else %}
+	<form action="." method="POST" role="form" id="insertarForm" class="form-horizontal">
+		{% csrf_token %}
+		{{form.as_p}}
+	<button class="btn btn-default" type="submit">Insertar Indicador</button>	
+  
+	</form>
+
+{% endif %}
+</div>
+<hr>
+{% endblock %}

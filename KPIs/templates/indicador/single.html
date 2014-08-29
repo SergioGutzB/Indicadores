@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %} Indicador - KPIs {% endblock %}
+{%block content %}
+	<div id="tabla_indicadores" class="col-md-12">
+	    
+	    <form class="form-horizontal" role="form">
+			<div class="form-group">
+			    <label for="nombre" class="col-sm-2 control-label">Nombre del Indicador</label>
+			    <div class="col-sm-10">
+			    	<input  disabled="" type="text" class="form-control" id="nombre" value="{{ indicador.Nombre }}">
+		    	</div>
+			</div>
+			<div class="form-group">
+			    <label for="dconcepto" class="col-sm-2 control-label">Descripción del Concepto</label>
+			    <div class="col-sm-10">
+			    	<textarea disabled="" class="form-control" id="dconcepto">{{ indicador.Descripcion_Concepto }}</textarea>
+		    	</div>
+			</div>
+			<div class="form-group">
+			    <label for="doperacion" class="col-sm-2 control-label">Descripción de la Operación</label>
+			    <div class="col-sm-10">
+			    	<textarea disabled="" class="form-control" id="doperacion">{{ indicador.Descripcion_Operacion }}</textarea>
+		    	</div>
+			</div>
+			<div class="form-group">
+			    <label for="otro" class="col-sm-2 control-label">Otro</label>
+			    <div class="col-sm-10">
+			    	<textarea disabled="" class="form-control" id="otro">{{ indicador.Otro}}</textarea>
+		    	</div>
+			</div>
+		</form>
+		<br>
+		<a class="btn btn-default btn-sm" href="{% url 'editar_indicador' indicador.id %}">Editar</a>
+		<a class="btn btn-default btn-sm" href="javascript:window.history.go(-1)">Regresar</a>
+		<hr>
+	</div>	
+{% endblock %}

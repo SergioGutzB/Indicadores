@@ -1,0 +1,7 @@
+@color1:red;
+@pad:500px;
+
+body{
+	background: @color1 !important;
+	padding-top: @pad;
+}

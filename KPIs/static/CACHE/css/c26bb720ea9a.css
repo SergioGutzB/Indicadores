@@ -1,0 +1,6 @@
+@color1:red;
+
+body{
+	background: @color1 !important;
+	padding-top: 100px;
+}

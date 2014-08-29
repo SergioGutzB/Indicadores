@@ -1,0 +1,6 @@
+$color:red
+$pad:500px
+
+body
+	background: $color !important
+	padding-top: $pad
