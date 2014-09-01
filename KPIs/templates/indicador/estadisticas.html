@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %} Lista de Indicadores - KPIs {% endblock %}
+{%block content %}
+	<div class="row">
+		<did class="col-md-3 col-xs-5">
+		{% if tipos%}
+			<p>Tipo de Indicador</p>
+			<hr>
+			<select class="form-control" id="tipo">  
+				<option>Elige un Tipo de Indicador</option>
+				{% for t in tipos %}
+					<option value="{{ t.id }}" >{{ t.Nombre }}</option>
+				{% endfor %}
+			</select>
+		{% endif %}	
+		</did>
+		<div class="col-md-12">
+		<br>
+		<hr>
+		<p align="center">Estadisticas de los indicadores KPIs, decauduerdo el al criterio <strong>SMART</strong> (Specific, Measurable, Achievable, Relevant y Time-based).</p>
+		</div>
+		<div id="datos" class="col-md-12 table-responsive">
+			<hr>	
+		</div>
+		<hr>
+		<br>
+		<div class="col-md-10 col-md-offset-1">
+		<div class="col-md-6">
+			<canvas id="canvas1" height="300" width="400"></canvas>	
+		[</div>
+		<div class="col-md-6">
+			<canvas id="canvas2" height="300" width="400"></canvas>			
+		</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+	$('select').on('change',inicio);
+	function redondeo(numero, decimales)
+	{
+	var flotante = parseFloat(numero);
+	var resultado = Math.round(flotante*Math.pow(10,decimales))/Math.pow(10,decimales);
+	return resultado;
+	}
+	function inicio ()
+	{
+		var id = $(this).val();
+		var nombre = $('#tipo option:selected').html()		
+		$.ajax({
+			data : {'id':id},
+			url: '/indicador/ajax/',
+			type: 'get',
+			success: function(data){
+				var html=""
+				html+='<hr><table class="table table-condensed"><thead><tr class="active"><td>'+nombre+'</td><td>Estimado</td><td>Real</td><td>% consecución</td><td>Acumu. Estimado</td><td>Acumu. Real</td><td>% consecución</td></tr></thead><tbody>'
+				var acumE=0;
+				var acumR=0;
+				var fecha="";
+				var vE=0;
+				var vR=0;
+				var labels =[];
+				var dataE = [];
+				var dataR = [];
+				for(var i=0; i<data.length;i++){
+					fecha = data[i].fields.fecha;
+					vE=data[i].fields.valor_estimado;
+					vR=data[i].fields.valor_real;
+					labels.push(fecha);
+					dataE.push(vE);
+					dataR.push(vR);
+					acumE = parseFloat(acumE) +parseFloat(vE);
+					acumR =parseFloat(acumR)+ parseFloat(vR);
+					html+='<tr><td>'+fecha+'</td><td>'+vE+'</td><td>'+vR+'</td><td>'+redondeo(((vR*100)/vE),2)+'%</td><td>'+acumE+'</td><td>'+acumR+'</td><td>'+redondeo(((acumR*100)/acumE),2)+'%</td></tr>'					
+				}
+				html+='</tbody></table>'
+
+				$('#datos').html(html);
+				console.log(dataR);
+				//--------------------------------------
+				var barChartData = {
+					labels : labels,
+					datasets : [
+						{
+							fillColor : "rgba(220,220,220,0.5)",
+							strokeColor : "rgba(220,220,220,0.8)",
+							highlightFill: "rgba(220,220,220,0.75)",
+							highlightStroke: "rgba(220,220,220,1)",
+							data: dataE
+						},
+						{
+							fillColor : "rgba(151,187,205,0.5)",
+							strokeColor : "rgba(151,187,205,0.8)",
+							highlightFill : "rgba(151,187,205,0.75)",
+							highlightStroke : "rgba(151,187,205,1)",
+							data: dataR
+						}
+					]
+
+				}
+
+				var lineChartData = {
+					labels : labels,
+					datasets : [
+						{
+							fillColor : "rgba(220,220,220,0.5)",
+							strokeColor : "rgba(220,220,220,0.8)",
+							highlightFill: "rgba(220,220,220,0.75)",
+							highlightStroke: "rgba(220,220,220,1)",
+							data: dataE
+						},
+						{
+							fillColor : "rgba(151,187,205,0.5)",
+							strokeColor : "rgba(151,187,205,0.8)",
+							highlightFill : "rgba(151,187,205,0.75)",
+							highlightStroke : "rgba(151,187,205,1)",
+							data: dataR
+						}
+					]
+
+				}
+				
+				var ctx = document.getElementById("canvas1").getContext("2d");
+				window.myBar = new Chart(ctx).Bar(barChartData, {
+					responsive : true
+				});
+				var ctx = document.getElementById("canvas2").getContext("2d");
+				window.myBar = new Chart(ctx).Line(lineChartData, {
+					responsive : true
+				});
+				
+				//--------------------------------------
+			}
+		});
+
+		
+	}
+	</script>
+{% endblock %}

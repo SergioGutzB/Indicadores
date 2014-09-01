@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %} Editar Indicador{% endblock %}
+{% block content %}
+<div id="form">
+<p>Editar Tipo de Indicador</p>
+<hr>
+		<form action="." method="POST"  role="form"  class="form-horizontal">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit" class="btn btn-sm btn-default">Guardar</button>
+			<button type="reset" class="btn btn-sm btn-default">Limpiar</button>
+		</form>
+<br>
+	{{ informacion }}
+<br>
+<a class="btn btn-default btn-sm" href="javascript:window.history.go(-1)">Regresar</a>
+</div>
+{% endblock %}
+
+	
+

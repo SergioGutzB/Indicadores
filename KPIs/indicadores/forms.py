@@ -1,17 +1,26 @@
 from django import forms
 from django.contrib.auth.models import User
 from indicadores.models import *
+from django.contrib.admin.widgets import AdminDateWidget
 
 
 class IndicadorForm(forms.Form):
-	Nombre	= forms.CharField(widget=forms.TextInput())
-	Descripcion_Concepto	= forms.CharField(widget=forms.Textarea())
-	Descripcion_Operacion	= forms.CharField(widget=forms.Textarea())
-	Otro = forms.CharField(widget=forms.Textarea())
+	fecha = forms.DateField(widget = AdminDateWidget)
+	valor_estimado = forms.DateField(widget=forms.DecimalField())
+	valor_real = forms.DateField(widget=forms.DecimalField())
 
 class addIndicadorForm(forms.ModelForm):
 	class Meta:
 		model = Indicador
+		exclude = {'status', }
+
+class Tipo_Indicador(forms.Form):
+	Nombre	= forms.CharField(widget=forms.TextInput())
+	Descripcion_Concepto	= forms.CharField(widget=forms.Textarea())
+
+class addTipo(forms.ModelForm):
+	class Meta:
+		model = Tipo_indicador
 		exclude = {'status', }
 
 class LoginForm (forms.Form):

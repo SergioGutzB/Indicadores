@@ -19,8 +19,7 @@ $(document).on('ready',function(){
             success:function(response)
             {
                 if(response.status=="True"){
-                    alert("Eliminado!");
-                    var idInd = response.indicador_id;
+                    var idInd = response.tipo_indicador_id;
                     var elementos= $(nombre_tabla+' >tbody >tr').length;
                     if(elementos==1){
                             location.reload();

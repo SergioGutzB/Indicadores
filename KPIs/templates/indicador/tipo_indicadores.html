@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %} Tipos de Indicadores - KPIs {% endblock %}
+{%block content %}
+
+	<!--IniciaModal-->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 	<div class="modal-dialog">
+	 		<div class="modal-content">
+			    <div class="modal-header">
+			    	<h3 id="myModalLabel">Eliminar Indicador KPI</h3>
+			    </div>
+			    <div class="modal-body">
+			    	<p>¿Realmente desea eliminar el indicador <span id="modal_name"></span>?</p>
+			    </div>
+			    <div class="modal-footer">
+			        <form method="post" id="frmEliminar">
+			            {% csrf_token %}
+			            <input type="hidden" id="modal_idIndicador" name="tipo_indicador_id">
+			            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+			            <button type="submit" class="btn btn-danger ">Eliminar</button>
+			        </form>
+			    </div>
+		    </div>
+	    </div>
+	</div>
+	<!--EndModal-->
+
+	<div class="col-md-12">
+	<h1>Tipos de Indicadores KPIs</h1>
+	<br>
+	{% if user.is_authenticated %}
+		<a class="btn btn-default btn-sm" href="{% url 'insertar' %}"><li class="glyphicon glyphicon-plus"></li>  Nuevo tipo</a>
+	{% endif %}
+	<hr>
+	{% if indicadores %}
+	    <table class="table table-hover table-condensed" id ="tabla_indicadores"> 
+	    	<thead>
+	                <tr>
+	                  <th>Nombre Indicador</th>
+	                  <th>Descripción del Concepto</th>
+	                </tr>
+	        </thead>
+	    {% for i in indicadores %}
+	     	<tbody>
+	     		<tr id="tr{{i.id}}"><a href=" ">
+					<td>{{ i.Nombre }}</td>
+					<td>{{ i.Descripcion_Concepto }}</td>
+					<td><a href="{% url 'tipo_indicador' i.id %}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+					{% if user.is_authenticated %}	
+					<td><a href="{% url 'editar_tipo_indicador' i.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+					<td><a class="delete" href="#myModal" data-target="#myModal" data-toggle="modal" id="{{ i.id }}" data-name="{{ i.Nombre }}"> <span class="glyphicon glyphicon-remove "></span></a></td>
+					{% endif %}
+				</a></tr>
+			</tbody>
+		{% endfor %}
+	    </table>
+		
+	{% else %}
+		<h2>No ha creado aún un tipo de indicador!</h2>
+	{% endif %}
+	<br>
+	<hr>
+	{% if tipo_indicadores %}
+	    <div class="paginador">
+	    <ul class="pagination">
+			<li><a href="{% url 'tipo_indicadores' 1 %}">&laquo;</a></li>
+		{% if tipo_indicadores.has_previous %}
+			<li><a href="{% url 'tipo_indicadores' tipo_indicadores.previous_page_number  %}"> Prev </a></li>
+		{% else %}
+			<li><a href="#"> Prev </a></li>
+		{% endif %}
+		{% if tipo_indicadores.has_next %}
+			<li><a href="{% url 'tipo_indicadores' tipo_indicadores.next_page_number %}"> Next </a></li>
+		{% else %}
+			<li><a href="#"> Next </a></li>
+		{% endif %}
+			<li><a href="{% url 'tipo_indicadores' tipo_indicadores.paginator.num_pages %} ">&raquo;</a></li>
+		</ul>
+		<h6>Página {{ tipo_indicadores.number }} de {{ tipo_indicadores.paginator.num_pages }}</h6>
+		</div>
+		
+	{% endif %}
+	</div>
+	
+{% endblock %}

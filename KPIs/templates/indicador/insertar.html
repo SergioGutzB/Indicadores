@@ -3,7 +3,7 @@
 {% block content %}
 <br>
 
-<div id="form">
+<div id="form" class="row">
 <p>Formulario para agregar un nuevo indicador KPIs.</p>
 <hr>
 {% if info_enviado %}
@@ -15,7 +15,7 @@
 	<p> Descripción de la operación: {{dOperacion}}</p>
 	<p> Otro: {{otro}}</p>
 {% else %}
-	<form action="." method="POST" role="form" id="insertarForm" class="form-horizontal">
+	<form action="." method="POST" role="form" id="insertarForm" class="form-horizontal col-md-4">
 		{% csrf_token %}
 		{{form.as_p}}
 	<button class="btn btn-default" type="submit">Insertar Indicador</button>	
@@ -26,3 +26,23 @@
 </div>
 <hr>
 {% endblock %}
+
+{% block js%}
+<script type="text/javascript">
+	var x;
+	x=$(document);
+	x.ready(inicializar);
+
+	function inicializar()
+	{
+		var x =	$('#id_fecha');
+		x.datepicker();
+		x.css('background-color','red !important');
+		x = $('#id_tipo');
+		x.addClass("form-control");
+		x = $('#id_valor_estimado').css('width','80px');
+		x = $('#id_valor_real').css('width','80px');
+	}
+	
+</script>
+{% endblock%}
